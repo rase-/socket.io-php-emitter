@@ -15,19 +15,19 @@ include 'emitter.php';
 $redis = new Redis();
 $redis->connect('127.0.0.1', '6379');
 $emitter = new Emitter($redis);
-$emitter->emit('xiit', 'woot');
+$emitter->emit('event', 'payload str');
 
 // Emitting without manually creating a redis instance
 $emitter = new Emitter(NULL, array('port' => '6379', 'host' => '127.0.0.1'));
-$emitter->emit('so', 'yo');
+$emitter->emit('event', 'wow');
 
 // Broadcasting
 $emitter->broadcast();
-$emitter->emit('so', 'yo');
+$emitter->emit('other event', 'such data');
 
 // Emitting binary
 $emitter->binary();
 $binarydata = pack("nvc*", 0x1234, 0x5678, 65, 66);
-$emitter->emit('so', $binarydata);
+$emitter->emit('very', $binarydata);
 ?>
 ```
