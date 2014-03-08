@@ -12,11 +12,13 @@
         "emit"
     ],
     "require": {
-        "php": ">=5.0"
+        "php": ">=5.3",
+        "ext-redis": "*",
+        "ext-msgpack": "*"
     },
     "autoload": {
-        "psr-0": {
-          "SocketIO": "src/"
+        "psr-4": {
+          "SocketIO\\": "src/"
         }
     }
 }

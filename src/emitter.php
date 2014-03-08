@@ -14,11 +14,11 @@ define('BINARY_EVENT', 5);
 
 class Emitter {
   public function __construct($redis, $opts = array()) {
-    if ($redis === NULL) {
+    if (!isset($redis)) {
       if (!$opts['host']) throw new Error('Host should be provided when not providing a redis instance');
       if (!$opts['port']) throw new Error('Port should be provided when not providing a redis instance');
 
-      $redis = new Redis();
+      $redis = new \Redis();
       $redis->connect($opts['host'], $opts['port']);
     }
 

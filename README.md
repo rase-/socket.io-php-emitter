@@ -9,7 +9,6 @@ This project uses [msgpack-php](https://github.com/msgpack/msgpack-php) and [php
 
 ```php
 <?php
-include 'emitter.php';
 
 // Emitting with a created redis instance
 $redis = new Redis();
@@ -29,5 +28,6 @@ $emitter->emit('other event', 'such data');
 $emitter->binary();
 $binarydata = pack("nvc*", 0x1234, 0x5678, 65, 66);
 $emitter->emit('very', $binarydata);
+
 ?>
 ```
