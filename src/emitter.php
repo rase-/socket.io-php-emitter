@@ -7,6 +7,8 @@
 // (https://github.com/nicolasff/phpredis#installation-on-osx) to be installed
 // and added as an extension
 
+namespace SocketIO;
+
 define('EVENT', 2);
 define('BINARY_EVENT', 5);
 
