@@ -7,11 +7,6 @@
 // (https://github.com/nicolasff/phpredis#installation-on-osx) to be installed
 // and added as an extension
 
-// TODO: has bin, is this even entirely possible?
-function hasBin($arg) {
-  return false;
-}
-
 define('EVENT', 2);
 define('BINARY_EVENT', 5);
 
@@ -32,10 +27,21 @@ class Emitter {
     $this->_flags = array();
   }
 
-  // Flags
+  /*
+   * Flags
+   */
+
   private function flag($flag) {
     $this->_flags[$flag] = TRUE;
     return $this;
+  }
+
+  private function readFlag($flag) {
+    return isset($this->_flags[$flag]) ? $this->_flags[$flag] : false;
+  }
+
+  public function binary() {
+    $this->flag('binary');
   }
 
   public function json() {
@@ -50,6 +56,10 @@ class Emitter {
     $this->flag('broadcast');
   }
 
+  /*
+   * Broadcasting
+   */
+
   public function in($room) {
     if (!in_array($room, $this->_rooms)) {
       $this->_rooms[] = $room;
@@ -63,11 +73,15 @@ class Emitter {
     return in($room);
   }
 
+  /*
+   * Emitting
+   */
+
   public function emit() {
     $args = func_get_args();
     $packet = array();
 
-    $packet['type'] = hasBin($args) ? BINARY_EVENT : EVENT;
+    $packet['type'] = $this->readFlag('binary') ? BINARY_EVENT : EVENT;
     $packet['data'] = $args;
 
     // publish
