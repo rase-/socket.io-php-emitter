@@ -1,0 +1,20 @@
+{
+    "name": "rase-/socket.io-php-emitter",
+    "description": "A PHP implementation of socket.io-emitter",
+    "homepage": "https://github.com/rase-/socket.io-php-emitter",
+    "support": {
+        "issues": "https://github.com/rase-/socket.io-php-emitter/issues",
+        "source": "https://github.com/rase-/socket.io-php-emitter"
+    },
+    "license": "MIT",
+    "keywords": [
+        "socket.io",
+        "emit"
+    ],
+    "require": {
+        "php": ">=5.0"
+    },
+    "autoload": {
+        "files": ["emitter.php"]
+    }
+}
