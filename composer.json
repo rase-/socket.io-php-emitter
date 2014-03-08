@@ -11,6 +11,9 @@
         "socket.io",
         "emit"
     ],
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
     "require": {
         "php": ">=5.3",
         "ext-redis": "*",
