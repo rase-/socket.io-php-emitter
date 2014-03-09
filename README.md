@@ -16,13 +16,13 @@ To run tests, invoke `make test`.
 <?php
 
 // Emitting with a created redis instance
-$redis = new Redis();
+$redis = new \Redis();
 $redis->connect('127.0.0.1', '6379');
-$emitter = new Emitter($redis);
+$emitter = new SocketIO\Emitter($redis);
 $emitter->emit('event', 'payload str');
 
 // Emitting without manually creating a redis instance
-$emitter = new Emitter(NULL, array('port' => '6379', 'host' => '127.0.0.1'));
+$emitter = new SocketIO\Emitter(NULL, array('port' => '6379', 'host' => '127.0.0.1'));
 $emitter->emit('event', 'wow');
 
 // Broadcasting
