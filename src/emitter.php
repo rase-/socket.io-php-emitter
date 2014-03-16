@@ -33,29 +33,13 @@ class Emitter {
    * Flags
    */
 
-  private function flag($flag) {
+  public function __get($flag) {
     $this->_flags[$flag] = TRUE;
     return $this;
   }
 
   private function readFlag($flag) {
     return isset($this->_flags[$flag]) ? $this->_flags[$flag] : false;
-  }
-
-  public function binary() {
-    return $this->flag('binary');
-  }
-
-  public function json() {
-    return $this->flag('json');
-  }
-
-  public function volatile() {
-    return $this->flag('volatile');
-  }
-
-  public function broadcast() {
-    return $this->flag('broadcast');
   }
 
   /*

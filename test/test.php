@@ -47,8 +47,7 @@ class EmitterTest extends PHPUnit_Framework_TestCase {
     sleep(1);
     // Running this should produce something that's visible in `redis-cli monitor`
     $emitter = new Emitter(NULL, array('host' => '127.0.0.1', 'port' => '6379'));
-    $emitter->broadcast();
-    $emitter->emit('so', 'yo');
+    $emitter->broadcast->emit('so', 'yo');
 
     $p->stop();
     $contents= file_get_contents('redis.log');
@@ -67,7 +66,7 @@ class EmitterTest extends PHPUnit_Framework_TestCase {
     sleep(1);
     // Running this should produce something that's visible in `redis-cli monitor`
     $emitter = new Emitter(NULL, array('host' => '127.0.0.1', 'port' => '6379'));
-    $emitter->binary();
+    $emitter->binary;
     $binarydata = pack('CCCCC', 0, 1, 2, 3, 4);
     $emitter->emit('binary event', $binarydata);
 
