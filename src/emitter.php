@@ -43,19 +43,19 @@ class Emitter {
   }
 
   public function binary() {
-    $this->flag('binary');
+    return $this->flag('binary');
   }
 
   public function json() {
-    $this->flag('json');
+    return $this->flag('json');
   }
 
   public function volatile() {
-    $this->flag('volatile');
+    return $this->flag('volatile');
   }
 
   public function broadcast() {
-    $this->flag('broadcast');
+    return $this->flag('broadcast');
   }
 
   /*
