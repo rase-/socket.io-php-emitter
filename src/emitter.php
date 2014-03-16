@@ -72,12 +72,13 @@ class Emitter {
     $args = func_get_args();
     $packet = array();
 
-    // handle binary wrapper args
     $packet['type'] = EVENT;
+    // handle binary wrapper args
     for ($i = 0; $i < count($args); $i++) {
-      if ($args[$i] instanceof SocketIO\Binary) {
-        $args[$i] = strval($args[$i]);
-        $packet['type'] = BINARY_EVENT;
+      $arg = $args[$i];
+      if ($arg instanceof Binary) {
+        $args[$i] = strval($arg);
+        $this->binary;
       }
     }
 
@@ -86,10 +87,18 @@ class Emitter {
     $packet['data'] = $args;
 
     // publish
-    $this->redis->publish($this->key, msgpack_pack([$packet, array(
+    $packed = msgpack_pack([$packet, array(
       'rooms' => $this->_rooms,
       'flags' => $this->_flags
-    )]));
+    )]);
+
+    // hack buffer extensions for msgpack with binary
+    if ($packet['type'] == BINARY_EVENT) {
+      $packed = str_replace(pack('c', 0xda), pack('c', 0xd8), $packed);
+      $packed = str_replace(pack('c', 0xdb), pack('c', 0xd9), $packed);
+    }
+
+    $this->redis->publish($this->key, $packed);
 
     // reset state
     $this->_rooms = array();
