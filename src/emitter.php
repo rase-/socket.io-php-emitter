@@ -67,7 +67,17 @@ class Emitter {
     $args = func_get_args();
     $packet = array();
 
-    $packet['type'] = $this->readFlag('binary') ? BINARY_EVENT : EVENT;
+    // handle binary wrapper args
+    $packet['type'] = EVENT;
+    for ($i = 0; $i < count($args); $i++) {
+      if ($args[$i] instanceof SocketIO\Binary) {
+        $args[$i] = strval($args[$i]);
+        $packet['type'] = BINARY_EVENT;
+      }
+    }
+
+    if ($this->readFlag('binary')) $packet['type'] = BINARY_EVENT;
+
     $packet['data'] = $args;
 
     // publish
