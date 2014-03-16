@@ -28,7 +28,7 @@ $emitter->emit('event', 'payload str');
 ```php
 <?php
 
-$emitter = new SocketIO\Emitter(NULL, array('port' => '6379', 'host' => '127.0.0.1'));
+$emitter = new SocketIO\Emitter(array('port' => '6379', 'host' => '127.0.0.1'));
 $emitter->emit('event', 'wow');
 
 ?>
@@ -38,7 +38,7 @@ $emitter->emit('event', 'wow');
 ```php
 <?php
 
-$emitter = new SocketIO\Emitter(NULL, array('port' => '6379', 'host' => '127.0.0.1'));
+$emitter = new SocketIO\Emitter(array('port' => '6379', 'host' => '127.0.0.1'));
 $emitter->broadcast->emit('other event', 'such data');
 
 ?>
@@ -48,7 +48,7 @@ $emitter->broadcast->emit('other event', 'such data');
 ```php
 <?php
 
-$emitter = new SocketIO\Emitter(NULL, array('port' => '6379', 'host' => '127.0.0.1'));
+$emitter = new SocketIO\Emitter(array('port' => '6379', 'host' => '127.0.0.1'));
 $binarydata = pack("nvc*", 0x1234, 0x5678, 65, 66);
 $emitter->emit('very', new SocketIO\Binary($binarydata));
 
