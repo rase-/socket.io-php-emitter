@@ -26,7 +26,7 @@ class EmitterTest extends PHPUnit_Framework_TestCase {
 
     sleep(1);
     // Running this should produce something that's visible in `redis-cli monitor`
-    $emitter = new Emitter(NULL, array('host' => '127.0.0.1', 'port' => '6379'));
+    $emitter = new Emitter(array('host' => '127.0.0.1', 'port' => '6379'));
     $emitter->emit('so', 'yo');
 
     $p->stop();
