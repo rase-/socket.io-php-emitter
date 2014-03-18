@@ -93,5 +93,20 @@ class EmitterTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue(strpos($contents, '\x00\x01\x02\x03\x04') !== FALSE);
   }
 
+  public function testPublishContainsNamespaceWhenEmittingWithNamespaceSet() {
+    $p = new Process('redis-cli monitor > redis.log');
+
+    sleep(1);
+    // Running this should produce something that's visible in `redis-cli monitor`
+    $emitter = new Emitter(NULL, array('host' => '127.0.0.1', 'port' => '6379'));
+    $emitter->of('nsp')->emit('yolo', 'data');
+
+    $p->stop();
+    $contents= file_get_contents('redis.log');
+    unlink('redis.log');
+
+    $this->assertTrue(strpos($contents, 'nsp') !== FALSE);
+  }
+
 }
 ?>

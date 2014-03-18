@@ -65,6 +65,15 @@ class Emitter {
   }
 
   /*
+   * Namespace
+   */
+
+  public function of($nsp) {
+    $this->_flags['nsp'] = $nsp;
+    return $this;
+  }
+
+  /*
    * Emitting
    */
 
@@ -85,6 +94,12 @@ class Emitter {
     if ($this->readFlag('binary')) $packet['type'] = BINARY_EVENT;
 
     $packet['data'] = $args;
+
+    // set namespace
+    if (isset($this->_flags['nsp'])) {
+      $packet['nsp'] = $this->_flags['nsp'];
+      unset($this->_flags['nsp']);
+    }
 
     // publish
     $packed = msgpack_pack([$packet, array(
