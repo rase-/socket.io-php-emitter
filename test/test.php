@@ -39,6 +39,8 @@ class EmitterTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue(strpos($contents, 'flags') !== FALSE);
     // Should not broadcast by default
     $this->assertFalse(strpos($contents, 'broadcast') !== FALSE);
+    // Should have the default namespace
+    $this->assertTrue(strpos($contents, '/') !== FALSE);
   }
 
   public function testPublishContainsBroadcastWhenBroadcasting() {
@@ -99,13 +101,13 @@ class EmitterTest extends PHPUnit_Framework_TestCase {
     sleep(1);
     // Running this should produce something that's visible in `redis-cli monitor`
     $emitter = new Emitter(NULL, array('host' => '127.0.0.1', 'port' => '6379'));
-    $emitter->of('nsp')->emit('yolo', 'data');
+    $emitter->of('/nsp')->emit('yolo', 'data');
 
     $p->stop();
     $contents= file_get_contents('redis.log');
     unlink('redis.log');
 
-    $this->assertTrue(strpos($contents, 'nsp') !== FALSE);
+    $this->assertTrue(strpos($contents, '/nsp') !== FALSE);
   }
 
 }

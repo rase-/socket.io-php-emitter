@@ -99,6 +99,8 @@ class Emitter {
     if (isset($this->_flags['nsp'])) {
       $packet['nsp'] = $this->_flags['nsp'];
       unset($this->_flags['nsp']);
+    } else {
+      $packet['nsp'] = '/';
     }
 
     // publish
