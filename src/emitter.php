@@ -20,11 +20,16 @@ class Emitter {
     }
 
     if (!isset($redis)) {
-      if (!$opts['host']) throw new Error('Host should be provided when not providing a redis instance');
-      if (!$opts['port']) throw new Error('Port should be provided when not providing a redis instance');
+      if (!isset($opts['socket']) && !isset($opts['host'])) throw new Error('Host should be provided when not providing a redis instance');
+      if (!isset($opts['socket']) && !isset($opts['port'])) throw new Error('Port should be provided when not providing a redis instance');
 
       $redis = new \Redis();
-      $redis->connect($opts['host'], $opts['port']);
+
+      if (isset($opts['socket'])) {
+        $redis->connect($opts['socket']);
+      } else {
+        $redis->connect($opts['host'], $opts['port']);
+      }
     }
 
     $this->redis = $redis;
