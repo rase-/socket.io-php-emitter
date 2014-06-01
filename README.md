@@ -6,9 +6,9 @@ A PHP implementation of socket.io-emitter.
 This project uses [msgpack-php](https://github.com/msgpack/msgpack-php) and [phpredis](https://github.com/nicolasff/phpredis). Make sure to have those extensions in use before trying to use the emitter.
 
 ## Installation and development
-To install and use in your PHP project, just use this as a composer package (will be available soon).
+To install and use in your PHP project, install it as a [composer package](https://packagist.org/packages/rase/socket.io-emitter).
 
-To run tests, invoke `make test`.
+To run tests, invoke `make test`. The current test suite will just be checking redis monitor that everything is published correctly. Some work will be put into making a better integration test suite in the near future.
 
 ## Usage
 
@@ -51,6 +51,7 @@ $emitter->broadcast->emit('other event', 'such data');
 ```
 
 ### Emitting binary
+Emitting binary doesn't yet function correctly in all cases. This will be fixed soon. The API will in any case look something like this:
 ```php
 <?php
 
