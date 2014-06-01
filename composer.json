@@ -1,5 +1,5 @@
 {
-    "name": "rase-/socket.io-php-emitter",
+    "name": "rase/socket.io-emitter",
     "description": "A PHP implementation of socket.io-emitter",
     "homepage": "https://github.com/rase-/socket.io-php-emitter",
     "support": {
