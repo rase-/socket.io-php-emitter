@@ -50,6 +50,16 @@ $emitter->broadcast->emit('other event', 'such data');
 ?>
 ```
 
+### Emitting objects
+```php
+<?php
+
+$emitter = new SocketIO\Emitter(array('port' => '6379', 'host' => '127.0.0.1'));
+$emitter->emit('event', array('property' => 'much value', 'another' => 'very object'));
+
+?>
+```
+
 ### Emitting binary
 Emitting binary doesn't yet function correctly in all cases. This will be fixed soon. The API will in any case look something like this:
 ```php
