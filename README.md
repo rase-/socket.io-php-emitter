@@ -59,15 +59,3 @@ $emitter->emit('event', array('property' => 'much value', 'another' => 'very obj
 
 ?>
 ```
-
-### Emitting binary
-Emitting binary doesn't yet function correctly in all cases. This will be fixed soon. The API will in any case look something like this:
-```php
-<?php
-
-$emitter = new SocketIO\Emitter(array('port' => '6379', 'host' => '127.0.0.1'));
-$binarydata = pack("nvc*", 0x1234, 0x5678, 65, 66);
-$emitter->emit('very', new SocketIO\Binary($binarydata));
-
-?>
-```
