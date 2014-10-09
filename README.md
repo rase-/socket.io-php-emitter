@@ -3,7 +3,8 @@ socket.io-php-emitter
 
 A PHP implementation of socket.io-emitter.
 
-This project uses [msgpack-php](https://github.com/msgpack/msgpack-php) and [phpredis](https://github.com/nicolasff/phpredis). Make sure to have those extensions in use before trying to use the emitter.
+This project uses [msgpack-php](https://github.com/msgpack/msgpack-php) and [phpredis](https://github.com/nicolasff/phpredis).
+Make sure to have phpredis installed before trying to use the emitter. If you don't have it installed, you can include [CRedis](https://github.com/colinmollenhour/credis) library in your project.
 
 ## Installation and development
 To install and use in your PHP project, install it as a [composer package](https://packagist.org/packages/rase/socket.io-emitter).
