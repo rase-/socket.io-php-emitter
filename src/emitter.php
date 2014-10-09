@@ -109,10 +109,10 @@ class Emitter {
     }
 
     // publish
-    $packed = msgpack_pack([$packet, array(
+    $packed = msgpack_pack(array($packet, array(
       'rooms' => $this->_rooms,
       'flags' => $this->_flags
-    )]);
+    )));
 
     // hack buffer extensions for msgpack with binary
     if ($packet['type'] == BINARY_EVENT) {
