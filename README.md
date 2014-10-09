@@ -15,24 +15,16 @@ To run tests, invoke `make test`. The current test suite will just be checking r
 
 ### Using an existing redis instance
 ```php
-<?php
-
 $redis = new \Redis();
 $redis->connect('127.0.0.1', '6379');
 $emitter = new SocketIO\Emitter($redis);
 $emitter->emit('event', 'payload str');
-
-?>
 ```
 
 ### Emitting without manually creating a redis instance
 ```php
-<?php
-
 $emitter = new SocketIO\Emitter(array('port' => '6379', 'host' => '127.0.0.1'));
 $emitter->emit('event', 'wow');
-
-?>
 ```
 
 ### Broadcasting and other flags
@@ -42,21 +34,13 @@ Possible flags
 * broadcast
 
 ```php
-<?php
-
 $emitter = new SocketIO\Emitter(array('port' => '6379', 'host' => '127.0.0.1'));
 // broadcast can be replaced by any of the other flags
 $emitter->broadcast->emit('other event', 'such data');
-
-?>
 ```
 
 ### Emitting objects
 ```php
-<?php
-
 $emitter = new SocketIO\Emitter(array('port' => '6379', 'host' => '127.0.0.1'));
 $emitter->emit('event', array('property' => 'much value', 'another' => 'very object'));
-
-?>
 ```
