@@ -11,11 +11,24 @@ if (!function_exists('msgpack_pack')) {
 
 class Emitter {
   public function __construct($redis = FALSE, $opts = array()) {
-    if (!$redis) {
-      throw new \Exception("You must provide a valid Redis Client. It is needed to talk to socket.io");
+    if (!$redis || is_array($redis)) {
+      // Default to phpredis
+      if (extension_loaded('redis')) {
+        if (!isset($opts['socket']) && !isset($opts['host'])) throw new \Exception('Host should be provided when not providing a redis instance');
+        if (!isset($opts['socket']) && !isset($opts['port'])) throw new \Exception('Port should be provided when not providing a redis instance');
+
+        $redis = new \Redis();
+        if (isset($opts['socket'])) {
+          $redis->connect($opts['socket']);
+        } else {
+          $redis->connect($opts['host'], $opts['port']);
+        }
+      } else {
+        throw new \Exception("You must provide a valid Redis client or options array.");
+      }
     }
 
-    if (!is_callable($redis,'publish')) {
+    if (!is_callable(array($redis, 'publish'))) {
       throw new \Exception("The Redis client you provided is invalid, Please try another one. For example Credis_Client");
     }
 
