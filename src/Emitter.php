@@ -28,6 +28,17 @@ class Emitter {
         } else {
           $redis->connect($opts['host'], $opts['port']);
         }
+      } else if(isset($opts['socket']) or isset($opts['host']) or isset($opts['port'])){
+        include_once(__DIR__.'/redis_client.php');
+        if(isset($opts['socket'])){
+          $redis = new Redis('unix://'.$opts['socket']);
+        } else {
+          $opts = array_merge(
+            array('port' => 6379, 'host' => 'localhost'),
+            $opts
+          );
+          $redis = new Redis($opts['host'].':'.$opts['port']);
+        }
       } else {
         throw new \Exception('You must provide a valid Redis client or options array.');
       }
