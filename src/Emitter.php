@@ -6,7 +6,7 @@ define('EVENT', 2);
 define('BINARY_EVENT', 5);
 
 if (!function_exists('msgpack_pack')) {
-  require('msgpack_pack');
+  require(__DIR__ . '/msgpack_pack.php');
 }
 
 class Emitter {
