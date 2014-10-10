@@ -5,38 +5,12 @@ namespace SocketIO;
 define('EVENT', 2);
 define('BINARY_EVENT', 5);
 
-class Emitter
-{
-     public function __construct($redis, $opts = array())
-     {
-          if (is_array($redis)) {
-               $opts = $redis;
-               $redis = NULL;
-          }
-
-          if (!isset($redis)) {
-               if (!isset($opts['socket'])){
-                    if(!isset($opts['host']))
-                         throw new \Exception('Host should be provided when not providing a redis instance');
-                    if(!isset($opts['port']))
-                         throw new \Exception('Port should be provided when not providing a redis instance');
-               }
-               if (class_exists('Redis')) {
-                    $redis = new \Redis();
-                    if (isset($opts['socket'])) {
-                         $redis->connect($opts['socket']);
-                    } else {
-                         $redis->connect($opts['host'], $opts['port']);
-                    }
-               } else if (class_exists('Credis_Client')) {
-                    if (isset($opts['socket'])) {
-                         $redis = new Credis_Client('unix://' . $opts['host']);
-                    } else {
-                         $redis = new Credis_Client($opts['host'], $opts['port']);
-                    }
-               }
-          }
-
+class Emitter {
+     public function __construct($redis = FALSE, $opts = array()){
+          if(!$redis)
+               throw new /Exception("You must provide a valid Redis Client. It is needed to talk to socket.io");
+          if(!is_callable($redis,'publish'))
+               throw new /Exception("The Redis client you provided is invalid, Please try another one. For example Credis_Client");
           $this->redis = $redis;
           $this->key = (isset($opts['key']) ? $opts['key'] : 'socket.io') . '#emitter';
 
@@ -48,14 +22,12 @@ class Emitter
       * Flags
       */
 
-     public function __get($flag)
-     {
+     public function __get($flag){
           $this->_flags[$flag] = TRUE;
           return $this;
      }
 
-     private function readFlag($flag)
-     {
+     private function readFlag($flag){
           return isset($this->_flags[$flag]) ? $this->_flags[$flag] : false;
      }
 
@@ -63,8 +35,7 @@ class Emitter
       * Broadcasting
       */
 
-     public function in($room)
-     {
+     public function in($room){
           if (!in_array($room, $this->_rooms)) {
                $this->_rooms[] = $room;
           }
@@ -73,8 +44,7 @@ class Emitter
      }
 
      // Alias for in
-     public function to($room)
-     {
+     public function to($room){
           return in($room);
      }
 
@@ -82,8 +52,7 @@ class Emitter
       * Namespace
       */
 
-     public function of($nsp)
-     {
+     public function of($nsp){
           $this->_flags['nsp'] = $nsp;
           return $this;
      }
@@ -92,8 +61,7 @@ class Emitter
       * Emitting
       */
 
-     public function emit()
-     {
+     public function emit(){
           $args = func_get_args();
           $packet = array();
 
@@ -143,8 +111,7 @@ class Emitter
 
 // From https://github.com/onlinecity/msgpack-php
 if (!function_exists('msgpack_pack')) {
-     function msgpack_pack($input)
-     {
+     function msgpack_pack($input){
           static $bigendian;
           if (!isset($bigendian)) $bigendian = (pack('S', 1) == pack('n', 1));
 
