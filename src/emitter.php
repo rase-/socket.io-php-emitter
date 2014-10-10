@@ -9,7 +9,7 @@ class Emitter {
      public function __construct($redis = FALSE, $opts = array()){
           if(!$redis)
                throw new \Exception("You must provide a valid Redis Client. It is needed to talk to socket.io");
-          if(!is_callable($redis,'publish'))
+          if(!is_callable($redis,'publish') && !method_exists($redis,"__call"))
                throw new \Exception("The Redis client you provided is invalid, Please try another one. For example Credis_Client");
           $this->redis = $redis;
           $this->key = (isset($opts['key']) ? $opts['key'] : 'socket.io') . '#emitter';
