@@ -16,8 +16,7 @@
     },
     "require": {
         "php": ">=5.3",
-        "ext-redis": "*",
-        "ext-msgpack": "*"
+        "ext-redis": "*"
     },
     "autoload": {
         "psr-4": {
