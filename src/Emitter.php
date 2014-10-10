@@ -11,7 +11,12 @@ if (!function_exists('msgpack_pack')) {
 
 class Emitter {
   public function __construct($redis = FALSE, $opts = array()) {
-    if (!$redis || is_array($redis)) {
+    if (is_array($redis)) {
+      $opts = $redis;
+      $redis = FALSE;
+    }
+
+    if (!$redis) {
       // Default to phpredis
       if (extension_loaded('redis')) {
         if (!isset($opts['socket']) && !isset($opts['host'])) throw new \Exception('Host should be provided when not providing a redis instance');
