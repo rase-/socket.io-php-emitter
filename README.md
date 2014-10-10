@@ -3,7 +3,7 @@ socket.io-php-emitter
 
 A PHP implementation of socket.io-emitter.
 
-This project requires a Redis Client for PHP. If you dont have the [PECL Redis](https://github.com/nicolasff/phpredis) installed already. You can use [Credis](https://github.com/colinmollenhour/credis) or any other.
+This project requires a Redis client for PHP. If you dont have the [PECL Redis](https://github.com/nicolasff/phpredis) installed already. You can use e.g. [Credis](https://github.com/colinmollenhour/credis), but or any other client that implements a `publish` method should work.
 
 ## Installation and development
 To install and use in your PHP project, install it as a [composer package](https://packagist.org/packages/rase/socket.io-emitter).
@@ -27,6 +27,7 @@ Possible flags
 * broadcast
 
 ```php
+// Below initialization will create a  phpredis client, or throw an exception is phpredis is not installed
 $emitter = new SocketIO\Emitter(array('port' => '6379', 'host' => '127.0.0.1'));
 // broadcast can be replaced by any of the other flags
 $emitter->broadcast->emit('other event', 'such data');
