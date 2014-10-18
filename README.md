@@ -3,7 +3,7 @@ socket.io-php-emitter
 
 A PHP implementation of socket.io-emitter.
 
-This project requires a Redis client for PHP. If you dont have the [PECL Redis](https://github.com/nicolasff/phpredis) installed already. You can use e.g. [Credis](https://github.com/colinmollenhour/credis), but or any other client that implements a `publish` method should work.
+This project requires a Redis client for PHP. If you dont have the [PECL Redis](https://github.com/nicolasff/phpredis) installed already. This library comes with a built-in Redis client, initialize with host, port or socket to use it.
 
 ## Installation and development
 To install and use in your PHP project, install it as a [composer package](https://packagist.org/packages/rase/socket.io-emitter).
@@ -12,12 +12,30 @@ To run tests, invoke `make test`. The current test suite will just be checking r
 
 ## Usage
 
-### Initialization
+### Initializing using an existing Redis client
 ```php
 $redis = new \Redis();
 $redis->connect('127.0.0.1', '6379');
 $emitter = new SocketIO\Emitter($redis);
 $emitter->emit('event', 'payload str');
+```
+### Initialization using the built-in Redis client
+#####Example #1
+```php
+$emitter = new SocketIO\Emitter(array('host' => 'localhost','port' => 6378));
+```
+#####Example #2 (using default port)
+```php
+$emitter = new SocketIO\Emitter(array('host' => 'localhost'));
+```
+#####Example #3 (using default host)
+```php
+$emitter = new SocketIO\Emitter(array('port' => 6378));
+```
+#####Example #4 (built-in Redis client)
+```php
+$redis = new SocketIO\Redis('localhost:6378');
+$emitter = new SocketIO\Emitter($redis);
 ```
 
 ### Broadcasting and other flags
