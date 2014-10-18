@@ -71,7 +71,7 @@ class Emitter {
 
   // Alias for in
   public function to($room) {
-    return in($room);
+    return $this->in($room);
   }
 
   /*
