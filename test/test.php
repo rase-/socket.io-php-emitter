@@ -18,16 +18,15 @@ class EmitterTest extends PHPUnit_Framework_TestCase {
     $contents= file_get_contents('redis.log');
     unlink('redis.log');
 
-    $this->assertTrue(strpos($contents, 'PUBLISH') !== FALSE);
+    $this->assertTrue(stripos($contents, 'publish') !== FALSE);
   }
 
-  public function testCanProvivideRedisInstance() {
+  public function testCanProvideRedisInstance() {
     $p = new Process('redis-cli monitor > redis.log');
 
     sleep(1);
     // Running this should produce something that's visible in `redis-cli monitor`
-    $redis = new \Redis();
-    $redis->connect('127.0.0.1', '6379');
+    $redis = new \TinyRedisClient('127.0.0.1:6379');
     $emitter = new Emitter($redis);
     $emitter->emit('so', 'yo');
 
@@ -35,7 +34,7 @@ class EmitterTest extends PHPUnit_Framework_TestCase {
     $contents= file_get_contents('redis.log');
     unlink('redis.log');
 
-    $this->assertTrue(strpos($contents, 'PUBLISH') !== FALSE);
+    $this->assertTrue(stripos($contents, 'publish') !== FALSE);
   }
 
   public function testPublishContainsExpectedAttributes() {

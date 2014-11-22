@@ -29,12 +29,12 @@ class Emitter {
           $redis->connect($opts['host'], $opts['port']);
         }
       } else {
-        throw new \Exception('You must provide a valid Redis client or options array.');
+        $redis = new \TinyRedisClient($opts['host'].':'.$opts['port']);
       }
     }
 
     if (!is_callable(array($redis, 'publish'))) {
-      throw new \Exception('The Redis client you provided is invalid, Please try another one. For example Credis_Client');
+      throw new \Exception('The Redis client provided is invalid. The client needs to implement the publish method. Try using the default client.');
     }
 
     $this->redis = $redis;

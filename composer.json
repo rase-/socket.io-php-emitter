@@ -16,7 +16,7 @@
     },
     "require": {
         "php": ">=5.3",
-        "ext-redis": "*"
+        "ptrofimov/tinyredisclient": "1.1.1"
     },
     "autoload": {
         "psr-4": {
