@@ -21,6 +21,22 @@ class EmitterTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue(stripos($contents, 'publish') !== FALSE);
   }
 
+  public function testDefaultsToLocalHostAndDefaultPort() {
+    $p = new Process('redis-cli monitor > redis.log');
+
+    sleep(1);
+    // Running this should produce something that's visible in `redis-cli monitor`
+    $emitter = new Emitter();
+    $emitter->emit('so', 'yo');
+
+    $p->stop();
+    $contents= file_get_contents('redis.log');
+    unlink('redis.log');
+
+    $this->assertTrue(stripos($contents, 'publish') !== FALSE);
+  }
+
+
   public function testCanProvideRedisInstance() {
     $p = new Process('redis-cli monitor > redis.log');
 

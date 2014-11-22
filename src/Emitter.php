@@ -16,6 +16,9 @@ class Emitter {
       $redis = FALSE;
     }
 
+    // Apply default arguments
+    $opts = array_merge(array('host' => 'localhost', 'port' => 6379), $opts);
+
     if (!$redis) {
       // Default to phpredis
       if (extension_loaded('redis')) {
