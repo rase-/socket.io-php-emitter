@@ -20,6 +20,26 @@ $emitter = new SocketIO\Emitter($redis);
 $emitter->emit('event', 'payload str');
 ```
 
+### Namespacing keys
+You can set a base namespace on initialisation:
+```php
+$redis = new \Redis();
+$redis->connect('127.0.0.1', '6379');
+$emitter = new SocketIO\Emitter($redis, array(
+	'key' => 'socket-io:'
+));
+```
+
+You can then specify events on specific emits:
+```php
+$emitter->emit('my-event', 'payload str');
+```
+Which will show up as:
+
+```sh
+"PUBLISH" "socket-io:my-event" ...
+```
+
 ### Broadcasting and other flags
 Possible flags
 * json
