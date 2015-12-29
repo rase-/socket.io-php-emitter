@@ -141,5 +141,50 @@ class EmitterTest extends PHPUnit_Framework_TestCase {
 
     $this->assertTrue(strpos($contents, '/nsp') !== FALSE);
   }
+
+  public function testPublishKeyNameWithNamespaceSet() {
+    $p = new Process('redis-cli monitor > redis.log');
+
+    sleep(1);
+    // Running this should produce something that's visible in `redis-cli monitor`
+    $emitter = new Emitter(NULL, array('host' => '127.0.0.1', 'port' => '6379'));
+    $emitter->of('/nsp')->emit('yolo', 'data');
+
+    $p->stop();
+    $contents= file_get_contents('redis.log');
+    unlink('redis.log');
+
+    $this->assertTrue(strpos($contents, 'socket.io#/nsp#') !== FALSE);
+  }
+
+  public function testPublishKeyNameWithRoomSet() {
+    $p = new Process('redis-cli monitor > redis.log');
+
+    sleep(1);
+    // Running this should produce something that's visible in `redis-cli monitor`
+    $emitter = new Emitter(NULL, array('host' => '127.0.0.1', 'port' => '6379'));
+    $emitter->to('rm')->emit('yolo', 'data');
+
+    $p->stop();
+    $contents= file_get_contents('redis.log');
+    unlink('redis.log');
+
+    $this->assertTrue(strpos($contents, 'socket.io#/#rm#') !== FALSE);
+  }
+
+  public function testPublishKeyNameWithNamespaceAndRoomSet() {
+    $p = new Process('redis-cli monitor > redis.log');
+
+    sleep(1);
+    // Running this should produce something that's visible in `redis-cli monitor`
+    $emitter = new Emitter(NULL, array('host' => '127.0.0.1', 'port' => '6379'));
+    $emitter->of('/nsp')->to('rm')->emit('yolo', 'data');
+
+    $p->stop();
+    $contents= file_get_contents('redis.log');
+    unlink('redis.log');
+
+    $this->assertTrue(strpos($contents, 'socket.io#/nsp#rm#') !== FALSE);
+  }
 }
 ?>

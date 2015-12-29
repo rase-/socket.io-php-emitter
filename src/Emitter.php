@@ -10,6 +10,8 @@ if (!function_exists('msgpack_pack')) {
 }
 
 class Emitter {
+  private $uid = 'emitter';
+
   public function __construct($redis = FALSE, $opts = array()) {
     if (is_array($redis)) {
       $opts = $redis;
@@ -41,7 +43,7 @@ class Emitter {
     }
 
     $this->redis = $redis;
-    $this->key = (isset($opts['key']) ? $opts['key'] : 'socket.io') . '#emitter';
+    $this->prefix = isset($opts['key']) ? $opts['key'] : 'socket.io';
 
     $this->_rooms = array();
     $this->_flags = array();
@@ -116,11 +118,12 @@ class Emitter {
       $packet['nsp'] = '/';
     }
 
-    // publish
-    $packed = msgpack_pack(array($packet, array(
+    $opts = array(
       'rooms' => $this->_rooms,
       'flags' => $this->_flags
-    )));
+    );
+	$chn = $this->prefix . '#' . $packet['nsp'] . '#';
+    $packed = msgpack_pack(array($this->uid,$packet,$opts));
 
     // hack buffer extensions for msgpack with binary
     if ($packet['type'] == BINARY_EVENT) {
@@ -128,7 +131,15 @@ class Emitter {
       $packed = str_replace(pack('c', 0xdb), pack('c', 0xd9), $packed);
     }
 
-    $this->redis->publish($this->key, $packed);
+    // publish
+	if (is_array($this->_rooms) && count($this->_rooms) > 0) {
+		foreach ($this->_rooms as $room) {
+			$chnRoom = $chn . $room . '#';
+		    $this->redis->publish($chnRoom, $packed);
+		}
+	} else {
+	    $this->redis->publish($chn, $packed);
+	}
 
     // reset state
     $this->_rooms = array();
