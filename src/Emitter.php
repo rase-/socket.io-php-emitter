@@ -122,7 +122,7 @@ class Emitter {
       'rooms' => $this->_rooms,
       'flags' => $this->_flags
     );
-	$chn = $this->prefix . '#' . $packet['nsp'] . '#';
+    $chn = $this->prefix . '#' . $packet['nsp'] . '#';
     $packed = msgpack_pack(array($this->uid,$packet,$opts));
 
     // hack buffer extensions for msgpack with binary
@@ -132,14 +132,14 @@ class Emitter {
     }
 
     // publish
-	if (is_array($this->_rooms) && count($this->_rooms) > 0) {
-		foreach ($this->_rooms as $room) {
-			$chnRoom = $chn . $room . '#';
-		    $this->redis->publish($chnRoom, $packed);
-		}
-	} else {
-	    $this->redis->publish($chn, $packed);
-	}
+    if (is_array($this->_rooms) && count($this->_rooms) > 0) {
+        foreach ($this->_rooms as $room) {
+            $chnRoom = $chn . $room . '#';
+            $this->redis->publish($chnRoom, $packed);
+        }
+    } else {
+        $this->redis->publish($chn, $packed);
+    }
 
     // reset state
     $this->_rooms = array();
