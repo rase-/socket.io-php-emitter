@@ -15,7 +15,7 @@ A PHP implementation of socket.io-emitter.
 This project requires a Redis client for PHP. If you dont have the [PECL Redis](https://github.com/nicolasff/phpredis) installed, the emitter will default to using [TinyRedisClient](https://github.com/ptrofimov/tinyredisclient). You can, however, pass in any Redis client that supports a `publish` method.
 
 ## Installation and development
-To install and use in your PHP project, install it as a [composer package](https://packagist.org/packages/rase/socket.io-emitter). Install dependencies with `composer install`.
+To install and use in your PHP project, install it as a [composer package](https://packagist.org/packages/ashiina/socket.io-emitter). Install dependencies with `composer install`.
 
 To run tests, invoke `make test`. The current test suite will just be checking redis monitor that everything is published correctly. Some work will be put into making a better integration test suite in the near future.
 
