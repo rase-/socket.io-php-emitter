@@ -1,5 +1,5 @@
 
-## Maintained Fork
+### *Maintained Fork*
 
 This is a fork of [rase-/socket.io-php-emitter](https://github.com/rase-/socket.io-php-emitter).  
 Since the original repo is not being maintained anymore and is having compatibility problems with 
