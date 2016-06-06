@@ -1,10 +1,10 @@
 {
-    "name": "rase/socket.io-emitter",
-    "description": "A PHP implementation of socket.io-emitter",
-    "homepage": "https://github.com/rase-/socket.io-php-emitter",
+    "name": "ashiina/socket.io-emitter",
+    "description": "*Maintained* A PHP implementation of socket.io-emitter",
+    "homepage": "https://github.com/ashiina/socket.io-php-emitter",
     "support": {
-        "issues": "https://github.com/rase-/socket.io-php-emitter/issues",
-        "source": "https://github.com/rase-/socket.io-php-emitter"
+        "issues": "https://github.com/ashiina/socket.io-php-emitter/issues",
+        "source": "https://github.com/ashiina/socket.io-php-emitter"
     },
     "license": "MIT",
     "keywords": [
