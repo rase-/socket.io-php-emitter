@@ -1,4 +1,4 @@
-socket.io-php-emitter
+socket.io-php-emitter - Please read this carefully
 =====================
 
 A PHP implementation of socket.io-emitter.
