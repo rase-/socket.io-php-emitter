@@ -69,6 +69,7 @@ class EmitterTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue(strpos($contents, 'yo') !== FALSE);
     $this->assertTrue(strpos($contents, 'rooms') !== FALSE);
     $this->assertTrue(strpos($contents, 'flags') !== FALSE);
+    $this->assertTrue(strpos($contents, 'except') !== FALSE);
     // Should not broadcast by default
     $this->assertFalse(strpos($contents, 'broadcast') !== FALSE);
     // Should have the default namespace
@@ -92,6 +93,7 @@ class EmitterTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue(strpos($contents, 'rooms') !== FALSE);
     $this->assertTrue(strpos($contents, 'flags') !== FALSE);
     $this->assertTrue(strpos($contents, 'broadcast') !== FALSE);
+    $this->assertTrue(strpos($contents, 'except') !== FALSE);
   }
 
   public function testPublishContainsExpectedDataWhenEmittingBinary() {

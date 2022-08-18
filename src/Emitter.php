@@ -5,11 +5,9 @@ namespace SocketIO;
 define('EVENT', 2);
 define('BINARY_EVENT', 5);
 
-if (!function_exists('msgpack_pack')) {
-  require(__DIR__ . '/msgpack_pack.php');
-}
-
 class Emitter {
+  const UID = "4N8LaD";
+
   public function __construct($redis = FALSE, $opts = array()) {
     if (is_array($redis)) {
       $opts = $redis;
@@ -41,10 +39,12 @@ class Emitter {
     }
 
     $this->redis = $redis;
-    $this->key = (isset($opts['key']) ? $opts['key'] : 'socket.io') . '#emitter';
+    $this->key = (isset($opts['key']) ? $opts['key'] : 'socket.io');
 
     $this->_rooms = array();
     $this->_flags = array();
+    $this->_exceptRooms = array();
+    $this->_packer = new \MessagePack\Packer();
   }
 
   /*
@@ -67,6 +67,14 @@ class Emitter {
   public function in($room) {
     if (!in_array($room, $this->_rooms)) {
       $this->_rooms[] = $room;
+    }
+
+    return $this;
+  }
+
+  public function except($room) {
+    if (!in_array($room, $this->_exceptRooms)) {
+      $this->_exceptRooms[] = $room;
     }
 
     return $this;
@@ -117,10 +125,13 @@ class Emitter {
     }
 
     // publish
-    $packed = msgpack_pack(array($packet, array(
-      'rooms' => $this->_rooms,
-      'flags' => $this->_flags
-    )));
+    $opts = array(
+            'rooms' => $this->_rooms,
+            'flags' => $this->_flags,
+            'except' => $this->_exceptRooms,
+    );
+
+    $packed = $this->_packer->pack(array(self::UID, $packet, $opts));
 
     // hack buffer extensions for msgpack with binary
     if ($packet['type'] == BINARY_EVENT) {
@@ -137,5 +148,3 @@ class Emitter {
     return $this;
   }
 }
-
-
