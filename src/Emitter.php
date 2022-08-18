@@ -5,11 +5,11 @@ namespace SocketIO;
 define('EVENT', 2);
 define('BINARY_EVENT', 5);
 
-if (!function_exists('msgpack_pack')) {
-  require(__DIR__ . '/msgpack_pack.php');
-}
-
 class Emitter {
+  const UID = "4N8LaD";
+  const DEFAULT_KEY = 'socket.io';
+  const DEFAULT_NSP = '/';
+
   public function __construct($redis = FALSE, $opts = array()) {
     if (is_array($redis)) {
       $opts = $redis;
@@ -41,10 +41,12 @@ class Emitter {
     }
 
     $this->redis = $redis;
-    $this->key = (isset($opts['key']) ? $opts['key'] : 'socket.io') . '#emitter';
+    $this->key = (isset($opts['key']) ? $opts['key'] : self::DEFAULT_KEY);
 
     $this->_rooms = array();
-    $this->_flags = array();
+    $this->setDefaultFlags();
+    $this->_exceptRooms = array();
+    $this->_packer = new \MessagePack\Packer();
   }
 
   /*
@@ -60,6 +62,10 @@ class Emitter {
     return isset($this->_flags[$flag]) ? $this->_flags[$flag] : false;
   }
 
+  private function setDefaultFlags() {
+    $this->_flags = array('nsp' => self::DEFAULT_NSP);
+  }
+
   /*
    * Broadcasting
    */
@@ -67,6 +73,14 @@ class Emitter {
   public function in($room) {
     if (!in_array($room, $this->_rooms)) {
       $this->_rooms[] = $room;
+    }
+
+    return $this;
+  }
+
+  public function except($room) {
+    if (!in_array($room, $this->_exceptRooms)) {
+      $this->_exceptRooms[] = $room;
     }
 
     return $this;
@@ -83,6 +97,7 @@ class Emitter {
 
   public function of($nsp) {
     $this->_flags['nsp'] = $nsp;
+
     return $this;
   }
 
@@ -109,18 +124,18 @@ class Emitter {
     $packet['data'] = $args;
 
     // set namespace
-    if (isset($this->_flags['nsp'])) {
-      $packet['nsp'] = $this->_flags['nsp'];
-      unset($this->_flags['nsp']);
-    } else {
-      $packet['nsp'] = '/';
-    }
+    $nsp = $this->_flags['nsp'];
+    $packet['nsp'] = $nsp;
+    unset($this->_flags['nsp']);
 
     // publish
-    $packed = msgpack_pack(array($packet, array(
-      'rooms' => $this->_rooms,
-      'flags' => $this->_flags
-    )));
+    $opts = array(
+            'rooms' => $this->_rooms,
+            'flags' => $this->_flags,
+            'except' => $this->_exceptRooms,
+    );
+
+    $packed = $this->_packer->pack(array(self::UID, $packet, $opts));
 
     // hack buffer extensions for msgpack with binary
     if ($packet['type'] == BINARY_EVENT) {
@@ -128,14 +143,14 @@ class Emitter {
       $packed = str_replace(pack('c', 0xdb), pack('c', 0xd9), $packed);
     }
 
-    $this->redis->publish($this->key, $packed);
+    $prefix = $this->key.'#'.$nsp.'#';
+    $this->redis->publish($prefix, $packed);
 
     // reset state
     $this->_rooms = array();
-    $this->_flags = array();
+    $this->_exceptRooms = array();
+    $this->setDefaultFlags();
 
     return $this;
   }
 }
-
-

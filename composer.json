@@ -16,7 +16,8 @@
     },
     "require": {
         "php": ">=5.3",
-        "ptrofimov/tinyredisclient": "1.1.1"
+        "ptrofimov/tinyredisclient": "1.1.1",
+        "rybakit/msgpack": "0.9.1"
     },
     "autoload": {
         "psr-4": {
