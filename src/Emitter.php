@@ -7,6 +7,8 @@ define('BINARY_EVENT', 5);
 
 class Emitter {
   const UID = "4N8LaD";
+  const DEFAULT_KEY = 'socket.io';
+  const DEFAULT_NSP = '/';
 
   public function __construct($redis = FALSE, $opts = array()) {
     if (is_array($redis)) {
@@ -39,10 +41,10 @@ class Emitter {
     }
 
     $this->redis = $redis;
-    $this->key = (isset($opts['key']) ? $opts['key'] : 'socket.io');
+    $this->key = (isset($opts['key']) ? $opts['key'] : self::DEFAULT_KEY);
 
     $this->_rooms = array();
-    $this->_flags = array();
+    $this->setDefaultFlags();
     $this->_exceptRooms = array();
     $this->_packer = new \MessagePack\Packer();
   }
@@ -58,6 +60,10 @@ class Emitter {
 
   private function readFlag($flag) {
     return isset($this->_flags[$flag]) ? $this->_flags[$flag] : false;
+  }
+
+  private function setDefaultFlags() {
+    $this->_flags = array('nsp' => self::DEFAULT_NSP);
   }
 
   /*
@@ -91,6 +97,7 @@ class Emitter {
 
   public function of($nsp) {
     $this->_flags['nsp'] = $nsp;
+
     return $this;
   }
 
@@ -117,12 +124,9 @@ class Emitter {
     $packet['data'] = $args;
 
     // set namespace
-    if (isset($this->_flags['nsp'])) {
-      $packet['nsp'] = $this->_flags['nsp'];
-      unset($this->_flags['nsp']);
-    } else {
-      $packet['nsp'] = '/';
-    }
+    $nsp = $this->_flags['nsp'];
+    $packet['nsp'] = $nsp;
+    unset($this->_flags['nsp']);
 
     // publish
     $opts = array(
@@ -139,11 +143,13 @@ class Emitter {
       $packed = str_replace(pack('c', 0xdb), pack('c', 0xd9), $packed);
     }
 
-    $this->redis->publish($this->key, $packed);
+    $prefix = $this->key.'#'.$nsp.'#';
+    $this->redis->publish($prefix, $packed);
 
     // reset state
     $this->_rooms = array();
-    $this->_flags = array();
+    $this->_exceptRooms = array();
+    $this->setDefaultFlags();
 
     return $this;
   }
